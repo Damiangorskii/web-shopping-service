@@ -1,0 +1,33 @@
+server:
+  port: 8087
+  error:
+    include-message: always
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  endpoint:
+    health:
+      show-details: always
+
+internal:
+  api:
+    search-service:
+      url: http://web-search-service:8086/search
+
+spring:
+  data:
+    mongodb:
+      host: web-mongodb
+      port: 27017
+      database: shopping
+      username: shopping-service
+      password: Password123!
+
+
+logging:
+  level:
+    root: INFO
+    com.example.webshoppingservice: DEBUG
