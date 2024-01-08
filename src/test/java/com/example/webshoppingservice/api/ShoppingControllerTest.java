@@ -132,6 +132,7 @@ class ShoppingControllerTest {
                 .thenReturn(emptyShoppingCart);
 
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
         String requestBodyJson = objectMapper.writeValueAsString(BODY);
 
         mockMvc.perform(post("/shopping/cart")
