@@ -127,7 +127,7 @@ class ShoppingControllerTest {
 
     @Test
     void should_return_empty_cart() throws Exception {
-        ShoppingCart emptyShoppingCart = new ShoppingCart(UUID.randomUUID(), Collections.emptyList());
+        ShoppingCart emptyShoppingCart = new ShoppingCart(UUID.randomUUID(), Collections.emptyList(), LocalDateTime.now());
         when(shoppingService.createShoppingCart(any()))
                 .thenReturn(emptyShoppingCart);
 

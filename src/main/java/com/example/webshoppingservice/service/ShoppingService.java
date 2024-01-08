@@ -6,17 +6,21 @@ import com.example.webshoppingservice.model.ShoppingCart;
 import com.example.webshoppingservice.model.ShoppingCartRequestBody;
 import com.example.webshoppingservice.repository.ShoppingCartRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ShoppingService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final ProductClient productClient;
@@ -36,7 +40,7 @@ public class ShoppingService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No available products found");
         }
 
-        ShoppingCart shoppingCart = new ShoppingCart(UUID.randomUUID(), filteredProducts);
+        ShoppingCart shoppingCart = new ShoppingCart(UUID.randomUUID(), filteredProducts, LocalDateTime.now());
         return shoppingCartRepository.save(shoppingCart);
     }
 
@@ -95,5 +99,12 @@ public class ShoppingService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Shopping cart not found"));
 
         shoppingCartRepository.delete(shoppingCart);
+    }
+
+    public void deleteOldCarts() {
+        LocalDateTime oneMinuteAgo = LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1);
+        shoppingCartRepository.deleteShoppingCartsByInsertDateTimeIsBefore(oneMinuteAgo);
+        log.info("Old shopping carts removed.");
+
     }
 }

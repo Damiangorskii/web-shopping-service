@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,7 +21,7 @@ class ShoppingCartRepositoryTestIT {
     @Test
     void should_find_cart_by_id() {
         UUID cartId = UUID.randomUUID();
-        ShoppingCart shoppingCart = new ShoppingCart(cartId, Collections.emptyList());
+        ShoppingCart shoppingCart = new ShoppingCart(cartId, Collections.emptyList(), LocalDateTime.now());
         shoppingCartRepository.save(shoppingCart);
 
         Optional<ShoppingCart> foundCart = shoppingCartRepository.findShoppingCartById(cartId);
@@ -31,7 +32,7 @@ class ShoppingCartRepositoryTestIT {
     @Test
     void should_delete_by_id() {
         UUID cartId = UUID.randomUUID();
-        ShoppingCart shoppingCart = new ShoppingCart(cartId, Collections.emptyList());
+        ShoppingCart shoppingCart = new ShoppingCart(cartId, Collections.emptyList(), LocalDateTime.now());
         shoppingCartRepository.save(shoppingCart);
 
         shoppingCartRepository.deleteShoppingCartById(cartId);
